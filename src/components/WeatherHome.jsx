@@ -1,56 +1,60 @@
 import React, { useState } from "react";
+import { useCallback } from "react";
 import { useEffect } from "react";
 const apiKey = "DG9Jed99IetFkzkfpLX3CV5qz9lZca27";
 let searchCityKey = `https://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apiKey}&offset=1&q=`;
 let weatherConditionApi =
   "https://dataservice.accuweather.com/forecasts/v1/daily/5day";
 function WeatherHome() {
+  const [city, setCity] = useState("");
+  const [cityCode, setCityCode] = useState("");
   const [weatherDetails, setWeatherDetails] = useState({
-    cityName: "",
-    headline: "",
+    weatherHeadline: "",
     forecast: [],
   });
-  const getCity = async (e) => {
-    console.log("selected", e.target.value);
-    let city = e.target.value;
-    if(city){
-        fetch(searchCityKey + city)
+
+  const getCity = useCallback(
+    (e) => {
+      let currentSelectedCity = e.target.value;
+      // console.log("selected", currentSelectedCity);
+      // console.log("city value in state: ", city);
+      fetch(searchCityKey + currentSelectedCity)
         .then((response) => {
           console.log(response);
           return response.json();
         })
         .then((responseData) => {
           console.log(responseData);
-          return {
-            key: responseData[0].Key,
-            cityName: responseData[0].EnglishName,
-          };
-        })
-        .then((cityData) => {
-          getWeatherDetails(cityData);
+          setCity(responseData[0].EnglishName);
+          setCityCode(responseData[0].Key);
         });
-    }else{
-        return false;
-    }
-  };
+      // .then((cityData) => {
+      //   getWeatherDetails(cityData);
+      // });
+    },
+    [city]
+  );
 
-  const getWeatherDetails = (cityData) => {
-    const currentConditionsApiQueryParam = `/${cityData.key}?apikey=${apiKey}&metric=true`;
-    console.log("weather condition api", weatherConditionApi);
-    fetch(weatherConditionApi + currentConditionsApiQueryParam)
-      .then((response) => {
-        return response.json();
-      })
-      .then((responseData) => {
-        console.log("conditions response data", responseData);
-        setWeatherDetails({
-          ...weatherDetails,
-          cityName: cityData.cityName,
-          forecast: responseData.DailyForecasts,
-          headline: responseData.Headline.Text,
-        });
-      });
-  };
+  const getWeatherDetails = useCallback(
+    (cityCode) => {
+      if (cityCode) {
+        const currentConditionsApiQueryParam = `/${cityCode}?apikey=${apiKey}&metric=true`;
+        fetch(weatherConditionApi + currentConditionsApiQueryParam)
+          .then((response) => {
+            return response.json();
+          })
+          .then((responseData) => {
+            console.log("conditions response data", responseData);
+            setWeatherDetails({
+              ...weatherDetails,
+              forecast: responseData.DailyForecasts,
+              headline: responseData.Headline.Text,
+            });
+          });
+      }
+    },
+    [cityCode]
+  );
 
   const getWeekDay = (locale, date) => {
     let weekDay = new Date(date).toLocaleDateString(locale, {
@@ -59,9 +63,9 @@ function WeatherHome() {
     return weekDay;
   };
 
-  //   useEffect(() => {
-  //     console.log("no effect");
-  //   });
+  useEffect(() => {
+    getWeatherDetails(cityCode);
+  }, [cityCode]);
 
   return (
     <div className="home">
@@ -74,10 +78,10 @@ function WeatherHome() {
           <option value="kolkata">Kolkata</option>
           <option value="bangalore">Bangalore</option>
         </select>
-        {weatherDetails.cityName && (
+        {city && (
           <div className="cityCondition">
-            <h3>{weatherDetails.cityName}</h3>
-            <p>{weatherDetails.headline}</p>
+            <h3>{city}</h3>
+            {weatherDetails.headline && <p>{weatherDetails.headline}</p>}
           </div>
         )}
         {weatherDetails.forecast && weatherDetails.forecast.length > 0 && (
@@ -117,4 +121,4 @@ function WeatherHome() {
   );
 }
 
-export default WeatherHome;
+export default React.memo(WeatherHome);
