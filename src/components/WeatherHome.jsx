@@ -13,21 +13,25 @@ function WeatherHome() {
   const getCity = async (e) => {
     console.log("selected", e.target.value);
     let city = e.target.value;
-    fetch(searchCityKey + city)
-      .then((response) => {
-        console.log(response);
-        return response.json();
-      })
-      .then((responseData) => {
-        console.log(responseData);
-        return {
-          key: responseData[0].Key,
-          cityName: responseData[0].EnglishName,
-        };
-      })
-      .then((cityData) => {
-        getWeatherDetails(cityData);
-      });
+    if(city){
+        fetch(searchCityKey + city)
+        .then((response) => {
+          console.log(response);
+          return response.json();
+        })
+        .then((responseData) => {
+          console.log(responseData);
+          return {
+            key: responseData[0].Key,
+            cityName: responseData[0].EnglishName,
+          };
+        })
+        .then((cityData) => {
+          getWeatherDetails(cityData);
+        });
+    }else{
+        return false;
+    }
   };
 
   const getWeatherDetails = (cityData) => {
