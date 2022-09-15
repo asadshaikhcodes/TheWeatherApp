@@ -46,6 +46,13 @@ function WeatherHome() {
       });
   };
 
+  const getWeekDay = (locale, date) => {
+    let weekDay = new Date(date).toLocaleDateString(locale, {
+      weekday: "long",
+    });
+    return weekDay;
+  };
+
   //   useEffect(() => {
   //     console.log("no effect");
   //   });
@@ -67,8 +74,10 @@ function WeatherHome() {
           </div>
         )}
         {weatherDetails.forecast && weatherDetails.forecast.length > 0 && (
-          <ul style={{ listStyle: "none", padding: "15px" }}>
-            <h4>Next 5 Days</h4>
+          <ul style={{ listStyle: "none", padding: "15px", margin: "0" }}>
+            <h4 style={{ margin: "10px auto 15px 0px", width: "max-content" }}>
+              Next 5 Days
+            </h4>
             {weatherDetails.forecast.map((forecast) => {
               return (
                 <li
@@ -76,16 +85,19 @@ function WeatherHome() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
+                    marginBottom: "15px",
                   }}
                   key={forecast.Date}
                 >
-                  <div>{new Date(forecast.Date).toLocaleDateString()}</div>
-                  <div>
-                    Max: {forecast.Temperature.Maximum.Value}{" "}
+                  <div style={{ width: "60px", textAlign: "left" }}>
+                    {getWeekDay("en-US", forecast.Date)}
+                  </div>
+                  <div style={{ width: "60px", textAlign: "left" }}>
+                    Max: {forecast.Temperature.Maximum.Value}
                     <span>&deg;C</span>
                   </div>
-                  <div>
-                    Min: {forecast.Temperature.Minimum.Value}{" "}
+                  <div style={{ width: "60px", textAlign: "left" }}>
+                    Min: {forecast.Temperature.Minimum.Value}
                     <span>&deg;C</span>
                   </div>
                 </li>
