@@ -28,6 +28,38 @@
   color: #61dafb;
 }
 
+.home{
+  width: 300px;
+  border-radius: 5px;
+  background-color: #232634;
+  color: #ffff;
+  padding: 3px;
+  margin: 30px auto;
+  overflow-y: auto;
+}
+
+.selectCity{
+  background: transparent;
+  border-color: transparent;
+  color: #fff;
+}
+
+.selectCity option{
+  background-color: #232634;
+}
+
+.cityCondition{
+  background-color: #2E3341;
+  width: 90%;
+  border-radius: 5px;
+  padding: 6px 3px;
+  margin: 8px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
