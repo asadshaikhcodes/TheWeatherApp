@@ -7,6 +7,7 @@ let weatherConditionApi =
 function WeatherHome() {
   const [weatherDetails, setWeatherDetails] = useState({
     cityName: "",
+    headline: "",
     forecast: [],
   });
   const getCity = async (e) => {
@@ -42,6 +43,7 @@ function WeatherHome() {
           ...weatherDetails,
           cityName: cityData.cityName,
           forecast: responseData.DailyForecasts,
+          headline: responseData.Headline.Text,
         });
       });
   };
@@ -71,6 +73,7 @@ function WeatherHome() {
         {weatherDetails.cityName && (
           <div className="cityCondition">
             <h3>{weatherDetails.cityName}</h3>
+            <p>{weatherDetails.headline}</p>
           </div>
         )}
         {weatherDetails.forecast && weatherDetails.forecast.length > 0 && (
