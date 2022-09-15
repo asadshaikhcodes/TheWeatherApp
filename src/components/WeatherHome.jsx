@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 const apiKey = "xmdbXNM8hpqQsqyWEUDQ61CuJEb1YKAc";
-let searchCityKey = `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apiKey}&offset=1&q=`;
+let searchCityKey = `https://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apiKey}&offset=1&q=`;
 let weatherConditionApi =
-  "http://dataservice.accuweather.com/forecasts/v1/daily/5day";
+  "https://dataservice.accuweather.com/forecasts/v1/daily/5day";
 function WeatherHome() {
   const [weatherDetails, setWeatherDetails] = useState({
     cityName: "",
