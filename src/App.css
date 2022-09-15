@@ -28,7 +28,7 @@
   color: #61dafb;
 }
 
-.home{
+.home {
   width: 300px;
   border-radius: 5px;
   background-color: #232634;
@@ -38,18 +38,19 @@
   overflow-y: auto;
 }
 
-.selectCity{
+.selectCity {
   background: transparent;
   border-color: transparent;
   color: #fff;
+  margin: 15px auto 15px;
 }
 
-.selectCity option{
+.selectCity option {
   background-color: #232634;
 }
 
-.cityCondition{
-  background-color: #2E3341;
+.cityCondition {
+  background-color: #2e3341;
   width: 90%;
   border-radius: 5px;
   padding: 6px 3px;

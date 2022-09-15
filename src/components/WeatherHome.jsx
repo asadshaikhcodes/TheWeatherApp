@@ -46,9 +46,9 @@ function WeatherHome() {
       });
   };
 
-//   useEffect(() => {
-//     console.log("no effect");
-//   });
+  //   useEffect(() => {
+  //     console.log("no effect");
+  //   });
 
   return (
     <div className="home">
@@ -66,7 +66,7 @@ function WeatherHome() {
             <h3>{weatherDetails.cityName}</h3>
           </div>
         )}
-        {weatherDetails.forecast && (
+        {weatherDetails.forecast && weatherDetails.forecast.length > 0 && (
           <ul style={{ listStyle: "none", padding: "15px" }}>
             <h4>Next 5 Days</h4>
             {weatherDetails.forecast.map((forecast) => {
