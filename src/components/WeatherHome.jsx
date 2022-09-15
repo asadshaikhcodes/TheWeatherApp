@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-const apiKey = "8gLHFi69zcHoGFk4VN4eAbNqbCsSBIwv";
+const apiKey = "xmdbXNM8hpqQsqyWEUDQ61CuJEb1YKAc";
 let searchCityKey = `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apiKey}&offset=1&q=`;
 let weatherConditionApi =
   "http://dataservice.accuweather.com/forecasts/v1/daily/5day";
@@ -10,15 +10,15 @@ function WeatherHome() {
     forecast: [],
   });
   const getCity = async (e) => {
-    // console.log("selected", e.target.value);
+    console.log("selected", e.target.value);
     let city = e.target.value;
     fetch(searchCityKey + city)
       .then((response) => {
-        // console.log(response);
+        console.log(response);
         return response.json();
       })
       .then((responseData) => {
-        // console.log(responseData);
+        console.log(responseData);
         return {
           key: responseData[0].Key,
           cityName: responseData[0].EnglishName,
@@ -31,13 +31,13 @@ function WeatherHome() {
 
   const getWeatherDetails = (cityData) => {
     const currentConditionsApiQueryParam = `/${cityData.key}?apikey=${apiKey}&metric=true`;
-    weatherConditionApi += currentConditionsApiQueryParam;
-    fetch(weatherConditionApi)
+    console.log("weather condition api", weatherConditionApi);
+    fetch(weatherConditionApi + currentConditionsApiQueryParam)
       .then((response) => {
         return response.json();
       })
       .then((responseData) => {
-        // console.log("conditions response data", responseData);
+        console.log("conditions response data", responseData);
         setWeatherDetails({
           ...weatherDetails,
           cityName: cityData.cityName,
@@ -77,10 +77,17 @@ function WeatherHome() {
                     alignItems: "center",
                     justifyContent: "space-between",
                   }}
+                  key={forecast.Date}
                 >
                   <div>{new Date(forecast.Date).toLocaleDateString()}</div>
-                  <div>Max: {forecast.Temperature.Maximum.Value}C</div>
-                  <div>Min: {forecast.Temperature.Minimum.Value}C</div>
+                  <div>
+                    Max: {forecast.Temperature.Maximum.Value}
+                    {forecast.Temperature.Maximum.Unit}
+                  </div>
+                  <div>
+                    Min: {forecast.Temperature.Minimum.Value}
+                    {forecast.Temperature.Maximum.Unit}
+                  </div>
                 </li>
               );
             })}
