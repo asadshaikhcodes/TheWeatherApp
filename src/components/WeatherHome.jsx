@@ -81,12 +81,12 @@ function WeatherHome() {
                 >
                   <div>{new Date(forecast.Date).toLocaleDateString()}</div>
                   <div>
-                    Max: {forecast.Temperature.Maximum.Value}
-                    {forecast.Temperature.Maximum.Unit}
+                    Max: {forecast.Temperature.Maximum.Value}{" "}
+                    <span>&deg;C</span>
                   </div>
                   <div>
-                    Min: {forecast.Temperature.Minimum.Value}
-                    {forecast.Temperature.Maximum.Unit}
+                    Min: {forecast.Temperature.Minimum.Value}{" "}
+                    <span>&deg;C</span>
                   </div>
                 </li>
               );
