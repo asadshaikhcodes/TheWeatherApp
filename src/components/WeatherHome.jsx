@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-const apiKey = "xmdbXNM8hpqQsqyWEUDQ61CuJEb1YKAc";
+const apiKey = "DG9Jed99IetFkzkfpLX3CV5qz9lZca27";
 let searchCityKey = `https://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apiKey}&offset=1&q=`;
 let weatherConditionApi =
   "https://dataservice.accuweather.com/forecasts/v1/daily/5day";
