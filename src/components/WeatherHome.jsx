@@ -13,27 +13,24 @@ function WeatherHome() {
     forecast: [],
   });
 
-  const getCity = useCallback(
-    (e) => {
-      let currentSelectedCity = e.target.value;
-      // console.log("selected", currentSelectedCity);
-      // console.log("city value in state: ", city);
-      fetch(searchCityKey + currentSelectedCity)
-        .then((response) => {
-          console.log(response);
-          return response.json();
-        })
-        .then((responseData) => {
-          console.log(responseData);
-          setCity(responseData[0].EnglishName);
-          setCityCode(responseData[0].Key);
-        });
-      // .then((cityData) => {
-      //   getWeatherDetails(cityData);
-      // });
-    },
-    [city]
-  );
+  const getCity = useCallback(() => {
+    //   let currentSelectedCity = e.target.value;
+    // console.log("selected", currentSelectedCity);
+    // console.log("city value in state: ", city);
+    fetch(searchCityKey + city)
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+      .then((responseData) => {
+        console.log(responseData);
+        setCity(responseData[0].EnglishName);
+        setCityCode(responseData[0].Key);
+      });
+    // .then((cityData) => {
+    //   getWeatherDetails(cityData);
+    // });
+  }, [city]);
 
   const getWeatherDetails = useCallback(
     (cityCode) => {
@@ -45,15 +42,22 @@ function WeatherHome() {
           })
           .then((responseData) => {
             console.log("conditions response data", responseData);
-            setWeatherDetails({
-              ...weatherDetails,
-              forecast: responseData.DailyForecasts,
-              headline: responseData.Headline.Text,
+            // setWeatherDetails({
+            //   ...weatherDetails,
+            //   forecast: responseData.DailyForecasts,
+            //   headline: responseData.Headline.Text,
+            // });
+            setWeatherDetails((weatherDetails) => {
+              return {
+                ...weatherDetails,
+                forecast: responseData.DailyForecasts,
+                headline: responseData.Headline.Text,
+              };
             });
           });
       }
     },
-    [cityCode]
+    []
   );
 
   const getWeekDay = (locale, date) => {
@@ -65,12 +69,18 @@ function WeatherHome() {
 
   useEffect(() => {
     getWeatherDetails(cityCode);
-  }, [cityCode]);
+  }, [cityCode,getWeatherDetails]);
 
   return (
     <div className="home">
       <div>
-        <select className="selectCity" onChange={getCity}>
+        <select
+          className="selectCity"
+          onChange={(e) => {
+            setCity(e.target.value);
+            getCity();
+          }}
+        >
           <option value="">Select City To Get The Weather</option>
           <option value="mumbai">Mumbai</option>
           <option value="thane">Thane</option>
