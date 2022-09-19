@@ -13,52 +13,51 @@ function WeatherHome() {
     forecast: [],
   });
 
-  const getCity = useCallback(() => {
-    //   let currentSelectedCity = e.target.value;
-    // console.log("selected", currentSelectedCity);
-    // console.log("city value in state: ", city);
-    fetch(searchCityKey + city)
-      .then((response) => {
-        console.log(response);
-        return response.json();
-      })
-      .then((responseData) => {
-        console.log(responseData);
-        setCity(responseData[0].EnglishName);
-        setCityCode(responseData[0].Key);
-      });
-    // .then((cityData) => {
-    //   getWeatherDetails(cityData);
-    // });
-  }, [city]);
+  const getCity = useCallback((city) => {
+    console.log("city useCallback called");
+    if (city) {
+      fetch(searchCityKey + city)
+        .then((response) => {
+          console.log(response);
+          return response.json();
+        })
+        .then((responseData) => {
+          console.log("city response data", responseData);
+          setCityCode(responseData[0].Key);
+        });
+    }
+  }, []);
 
-  const getWeatherDetails = useCallback(
-    (cityCode) => {
-      if (cityCode) {
-        const currentConditionsApiQueryParam = `/${cityCode}?apikey=${apiKey}&metric=true`;
-        fetch(weatherConditionApi + currentConditionsApiQueryParam)
-          .then((response) => {
-            return response.json();
-          })
-          .then((responseData) => {
-            console.log("conditions response data", responseData);
-            // setWeatherDetails({
-            //   ...weatherDetails,
-            //   forecast: responseData.DailyForecasts,
-            //   headline: responseData.Headline.Text,
-            // });
-            setWeatherDetails((weatherDetails) => {
-              return {
-                ...weatherDetails,
-                forecast: responseData.DailyForecasts,
-                headline: responseData.Headline.Text,
-              };
-            });
+  const getWeatherDetails = useCallback((cityCode) => {
+    if (cityCode) {
+      const currentConditionsApiQueryParam = `/${cityCode}?apikey=${apiKey}&metric=true`;
+      fetch(weatherConditionApi + currentConditionsApiQueryParam)
+        .then((response) => {
+          return response.json();
+        })
+        .then((responseData) => {
+          console.log("conditions response data", responseData);
+          setWeatherDetails((weatherDetails) => {
+            return {
+              ...weatherDetails,
+              forecast: responseData.DailyForecasts,
+              headline: responseData.Headline.Text,
+            };
           });
-      }
-    },
-    []
-  );
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("city effect called");
+    console.log("city value in state", city);
+    getCity(city);
+  }, [city, getCity]);
+
+  useEffect(() => {
+    console.log("city code effect called");
+    getWeatherDetails(cityCode);
+  }, [cityCode, getWeatherDetails]);
 
   const getWeekDay = (locale, date) => {
     let weekDay = new Date(date).toLocaleDateString(locale, {
@@ -67,18 +66,15 @@ function WeatherHome() {
     return weekDay;
   };
 
-  useEffect(() => {
-    getWeatherDetails(cityCode);
-  }, [cityCode,getWeatherDetails]);
-
   return (
     <div className="home">
       <div>
         <select
           className="selectCity"
           onChange={(e) => {
-            setCity(e.target.value);
-            getCity();
+            setCity(
+              e.target.value[0].toUpperCase() + e.target.value.substring(1)
+            );
           }}
         >
           <option value="">Select City To Get The Weather</option>
