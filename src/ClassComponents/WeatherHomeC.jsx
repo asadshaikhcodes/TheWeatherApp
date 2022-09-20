@@ -19,7 +19,6 @@ const getWeekDay = (locale, date) => {
 class WeatherHomeC extends Component {
   constructor(props) {
     super(props);
-
     //initializing state
     this.state = {
       city: "",
@@ -27,6 +26,7 @@ class WeatherHomeC extends Component {
       forecasts: [],
       weatherHeadline: "",
       currentConditions: "",
+      gotWeather: true,
     };
 
     //bind onChange handler to this instance
@@ -36,6 +36,7 @@ class WeatherHomeC extends Component {
   //get city name from dropdown list
   cityHandleChange(e) {
     const cityVal = e.target.value;
+    this.setState({ gotWeather: false });
     this.getCity(cityVal);
   }
 
@@ -61,6 +62,7 @@ class WeatherHomeC extends Component {
           this.setState({
             cityCode: responseData[0].Key,
             city: responseData[0].EnglishName,
+            gotWeather: true,
           });
         });
     }
@@ -138,6 +140,8 @@ class WeatherHomeC extends Component {
               </h3>
               {this.state.headline && <p>{this.state.headline}</p>}
             </div>
+          ) : !this.state.gotWeather ? (
+            <h3>Getting weather....</h3>
           ) : (
             <ShowDateC />
           )}
