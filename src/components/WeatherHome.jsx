@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
+import ShowDate from "./ShowDate";
 const apiKey = "DG9Jed99IetFkzkfpLX3CV5qz9lZca27";
 let searchCityKey = `https://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apiKey}&offset=1&q=`;
 let weatherConditionApi =
   "https://dataservice.accuweather.com/forecasts/v1/daily/5day";
+let currentConditionsApi =
+  "https://dataservice.accuweather.com/currentconditions/v1/";
+const weatherIcon = require("./cloudy.png");
 function WeatherHome() {
   const [city, setCity] = useState("");
   const [cityCode, setCityCode] = useState("");
@@ -12,6 +16,7 @@ function WeatherHome() {
     weatherHeadline: "",
     forecast: [],
   });
+  const [currentConditions, setCurrentConditions] = useState();
 
   const getCity = useCallback((city) => {
     console.log("city useCallback called");
@@ -48,16 +53,40 @@ function WeatherHome() {
     }
   }, []);
 
+  const getCurrentCondition = useCallback((cityCode) => {
+    if (cityCode) {
+      const currentConditionsApiQueryParam = `${cityCode}?apikey=${apiKey}`;
+      fetch(currentConditionsApi + currentConditionsApiQueryParam)
+        .then((response) => {
+          return response.json();
+        })
+        .then((responseData) => {
+          console.log("current conditions response data", responseData);
+          setCurrentConditions(responseData[0].Temperature.Metric.Value);
+        });
+    }
+  }, []);
+
   useEffect(() => {
     console.log("city effect called");
     console.log("city value in state", city);
     getCity(city);
+    return () => {
+      console.log("city cleanup called");
+    };
   }, [city, getCity]);
 
   useEffect(() => {
     console.log("city code effect called");
+    const currentConditionsTimer = setTimeout(() => {
+      getCurrentCondition(cityCode);
+    }, 5000);
     getWeatherDetails(cityCode);
-  }, [cityCode, getWeatherDetails]);
+    return () => {
+      console.log("get weather details cleanup called");
+      clearTimeout(currentConditionsTimer);
+    };
+  }, [cityCode, getWeatherDetails, getCurrentCondition]);
 
   const getWeekDay = (locale, date) => {
     let weekDay = new Date(date).toLocaleDateString(locale, {
@@ -84,11 +113,33 @@ function WeatherHome() {
           <option value="kolkata">Kolkata</option>
           <option value="bangalore">Bangalore</option>
         </select>
-        {city && (
+        {city && currentConditions ? (
           <div className="cityCondition">
-            <h3>{city}</h3>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h3>{city}</h3>
+              <img
+                width="50px"
+                height="50px"
+                src={weatherIcon}
+                alt="weather icon"
+              />
+            </div>
+            <h3
+              style={{ width: "max-content", textAlign: "left", margin: "0px" }}
+            >
+              {currentConditions}
+              <span>&deg;C</span>
+            </h3>
             {weatherDetails.headline && <p>{weatherDetails.headline}</p>}
           </div>
+        ) : (
+          <ShowDate />
         )}
         {weatherDetails.forecast && weatherDetails.forecast.length > 0 && (
           <ul style={{ listStyle: "none", padding: "15px", margin: "0" }}>
