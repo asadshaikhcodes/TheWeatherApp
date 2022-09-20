@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // import ShowDate from "../components/ShowDate";
 import ShowDateC from "./ShowDateC";
-const apiKey = "ax8Cm1ayEWNxEBvo7VAXtEzU85vACtRy";
+const apiKey = "0w7vHAjUcqfkFAsCvtwNiAiiqNzrdooT";
 let searchCityKey = `https://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apiKey}&offset=1&q=`;
 let weatherConditionApi =
   "https://dataservice.accuweather.com/forecasts/v1/daily/5day";
