@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import ShowDate from "./ShowDate";
-const apiKey = "DG9Jed99IetFkzkfpLX3CV5qz9lZca27";
+const apiKey = "ax8Cm1ayEWNxEBvo7VAXtEzU85vACtRy";
 let searchCityKey = `https://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apiKey}&offset=1&q=`;
 let weatherConditionApi =
   "https://dataservice.accuweather.com/forecasts/v1/daily/5day";
