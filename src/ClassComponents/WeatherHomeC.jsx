@@ -41,7 +41,6 @@ class WeatherHomeC extends Component {
   }
 
   //get weather forecasts and current condition once cityCode is updated
-  //set current condition initially
   componentDidUpdate(previousProps, previousState) {
     console.log("previous state", previousState);
     if (previousState.cityCode !== this.state.cityCode) {
